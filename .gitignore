@@ -1,0 +1,11 @@
+# Windows
+Thumbs.db
+desktop.ini
+*.lnk
+
+# Rainmeter generated files
+*.rmskin
+
+# Editor files
+.vscode/
+*.swp
