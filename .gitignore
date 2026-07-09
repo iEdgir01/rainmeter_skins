@@ -9,3 +9,7 @@ desktop.ini
 # Editor files
 .vscode/
 *.swp
+
+# Claude Code
+.claude/settings.local.json
+.superpowers/
