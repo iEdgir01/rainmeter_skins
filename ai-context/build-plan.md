@@ -1,7 +1,7 @@
 # Build plan
 
 ## Phase 0 — Ship (complete)
-- [x] InternetMonitor skin: ping/bandwidth/packet-loss monitor with connect/disconnect toggle
+- [x] InternetMonitor skin: dual-WAN status from a router health feed (PR #2)
 - [x] ServerStatus skin: 2-device LAN ping badge
 - [x] README.md documenting install/config for both
 - [x] Public release committed (`551427c`)

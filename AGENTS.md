@@ -6,14 +6,16 @@ This repository holds two standalone Rainmeter desktop skins.
 Each skin is a single `.ini` config.
 Neither skin uses Lua.
 
-### InternetMonitor (`InternetStatus.ini`)
+### InternetMonitor (`InternetStatus.ini` + `Hist.inc`)
 
-- Pings `8.8.8.8` every second via `PingPlugin`.
-- Shows a color-coded status dot (green/orange/red by latency threshold) and live ping in ms.
-- On hover, expands to show a ping graph, NetIn/NetOut bandwidth, and rolling packet-loss %.
-- A click on the status dot runs `InternetController.bat`.
-- The script pings once to detect state, then calls `ipconfig /release` or `ipconfig /renew`.
-- The script requires admin privileges.
+- Reports dual-WAN status for a fibre primary and an LTE backup.
+- Reads link state from a router health feed. It does not decide link state itself.
+- The feed is `net-health.json`, served by n8n at `192.168.88.210:5678`.
+- Pings `1.1.1.1` via `PingPlugin` for local latency, jitter and loss.
+- Shows a status dot, latency, the active WAN name, and time held on that link.
+- On hover, expands to show links, probe health, latency, throughput, DNS and 20-minute history.
+- `Hist.inc` holds the 20 history cells. A script generates that file.
+- The skin has no click actions. It is a display only.
 
 ### ServerStatus (`ServerState.ini`)
 
@@ -27,16 +29,20 @@ This plugin is not bundled in this repo — see README Requirements.
 
 ## Current status
 
-Both skins are functionally complete and released.
-Single commit: `551427c` ("Initial public release").
+ServerStatus is complete and released.
+InternetMonitor was rebuilt in PR #2 around router-sourced link state.
 No code changes are pending.
-`AGENTS.md` and `ai-context/` exist locally but were never committed — see `ai-context/resume.md`.
 
 ## Key decisions (the why)
 
 - Skins use plain `.ini` plus built-in Rainmeter measures (`Plugin`, `Calc`, `NetIn`, `NetOut`) instead of Lua.
 - Only PingPlugin is an external dependency.
-- InternetMonitor connect/disconnect shells out to a `.bat` file. `ipconfig` needs admin rights that Rainmeter may not have.
+- The router decides link state, not the skin. The skin sits behind the router. It sees only the active path.
+- The router probes both WANs pinned to separate routing tables. It can report one link down while the other carries traffic.
+- The skin never pings a WAN gateway. The fibre ONT answers ICMP while the line is dead.
+- History reads one packed `hist` string as 20 capture groups in the parent regex.
+- A child WebParser measure ignores `RegExp2`. Only the parent `RegExp` runs.
+- The latency graph uses a fixed ceiling. `AutoScale` made a flat 2 ms line look like activity.
 - ServerStatus uses `IfBelowValue`/`IfAboveValue` plugin actions directly (no separate Calc). It only needs binary online/offline state.
 
 ## To-do
