@@ -8,17 +8,22 @@ A collection of lightweight Rainmeter skins for monitoring network connectivity 
 
 ### InternetMonitor
 
-A compact network monitor that displays real-time connection status, ping latency, upload/download speeds, and packet loss. Hover to expand and see detailed graphs and stats.
+A compact dual-WAN monitor for a fibre primary with an LTE backup. It shows which link is carrying traffic, how long it has held, and the state of both links. Hover to expand for probe health, latency, throughput, DNS and a 20-minute history.
 
 **Features:**
-- Live ping to a configurable host (default: `8.8.8.8`)
-- Color-coded status dot (green / orange / red) based on latency thresholds
-- Expandable panel with ping graph, download/upload speeds, and packet loss %
-- One-click connect/disconnect (runs `ipconfig /release` or `/renew`)
+- Per-link up/down state for both WANs, sourced from the router
+- Colour-coded status dot and live latency to a configurable host (default: `1.1.1.1`)
+- Expandable panel with probe health, latency, throughput, DNS and a 20-minute history strip
+- A single banner surfaces failover, degradation and endpoint outages
 
 **Files:**
 - `InternetStatus.ini` — main skin file
-- `InternetController.bat` — toggles network connection (requires running as administrator)
+- `Hist.inc` — 20 history cells (generated; do not hand-edit)
+
+**Requires a health feed.** The skin reads `net-health.json` from an n8n
+endpoint set by `HealthURL` in `[Variables]`. The router publishes per-link
+state to that workflow; the skin renders it and never probes the WANs itself.
+Without the feed, link state shows "no data" rather than a false "healthy".
 
 ---
 
@@ -80,9 +85,11 @@ ColorBackground=0,0,0,180
 Width=240
 ```
 
-The default ping target is Google's public DNS (`8.8.8.8`). To change it, find `[MeasurePing]` and update `DestAddress`.
+The default ping target is Cloudflare (`1.1.1.1`). To change it, update `PingTarget` in `[Variables]`. This measures **this PC's** path, not the WAN; WAN health comes from the feed.
 
-> **Note:** The connect/disconnect button runs `InternetController.bat`, which calls `ipconfig /release` or `/renew`. This requires Rainmeter (or the bat file) to be run with administrator privileges to work correctly.
+> **Note:** The skin has no click actions. A status indicator that also
+> released the DHCP lease was removed — it was a 7px target in the hover path,
+> with no confirmation and inverted logic.
 
 ---
 
