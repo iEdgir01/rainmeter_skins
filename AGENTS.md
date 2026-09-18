@@ -1,27 +1,52 @@
 # AGENTS — Rainmeter Skins
 
 ## Project overview
-Two standalone Rainmeter desktop skins, each a single `.ini` config (no Lua):
 
-- **InternetMonitor** (`InternetStatus.ini`): pings `8.8.8.8` every second via `PingPlugin`, shows a color-coded status dot (green/orange/red by latency threshold) and live ping ms. On hover, expands to show a ping graph, NetIn/NetOut bandwidth (Rainmeter's built-in `NetIn`/`NetOut` measures), and a rolling packet-loss %. Clicking the status dot runs `InternetController.bat`, which pings once to detect current state then calls `ipconfig /release` or `ipconfig /renew` — requires admin privileges.
-- **ServerStatus** (`ServerState.ini`): pings two configurable LAN IPs (`Device1IP`/`Device2IP`) once per second, swaps an `Online.png`/`Offline.png` icon per device based on whether the ping is below/above `PingTimeout`. No expand/collapse, no bandwidth — pure up/down indicator for e.g. NAS/home server boxes.
+This repository holds two standalone Rainmeter desktop skins.
+Each skin is a single `.ini` config.
+Neither skin uses Lua.
 
-Both depend on the third-party **PingPlugin** (not bundled in this repo — see README Requirements).
+### InternetMonitor (`InternetStatus.ini`)
+
+- Pings `8.8.8.8` every second via `PingPlugin`.
+- Shows a color-coded status dot (green/orange/red by latency threshold) and live ping in ms.
+- On hover, expands to show a ping graph, NetIn/NetOut bandwidth, and rolling packet-loss %.
+- A click on the status dot runs `InternetController.bat`.
+- The script pings once to detect state, then calls `ipconfig /release` or `ipconfig /renew`.
+- The script requires admin privileges.
+
+### ServerStatus (`ServerState.ini`)
+
+- Pings two configurable LAN IPs (`Device1IP`/`Device2IP`) once per second.
+- Swaps an `Online.png`/`Offline.png` icon per device by ping vs `PingTimeout`.
+- Has no expand/collapse and no bandwidth display.
+- Pure up/down indicator (for example NAS or home server boxes).
+
+Both skins depend on third-party **PingPlugin**.
+This plugin is not bundled in this repo — see README Requirements.
 
 ## Current status
-Skins are functionally complete and released (single commit `551427c`, "Initial public release"). No code changes pending. `AGENTS.md`/`ai-context/` exist locally but were never committed — see `ai-context/resume.md`.
+
+Both skins are functionally complete and released.
+Single commit: `551427c` ("Initial public release").
+No code changes are pending.
+`AGENTS.md` and `ai-context/` exist locally but were never committed — see `ai-context/resume.md`.
 
 ## Key decisions (the why)
-- Plain `.ini` + built-in Rainmeter measures (`Plugin`, `Calc`, `NetIn`, `NetOut`) chosen over Lua scripting — keeps both skins dependency-light (only PingPlugin needed) and easy to hand-edit.
-- InternetMonitor's connect/disconnect button shells out to a `.bat` rather than doing it in-skin, since `ipconfig` needs admin rights Rainmeter itself may not have.
-- ServerStatus uses `IfBelowValue`/`IfAboveValue` plugin actions directly (no separate Calc measure) since it only needs a binary online/offline state, unlike InternetMonitor's 4-tier threshold logic.
+
+- Skins use plain `.ini` plus built-in Rainmeter measures (`Plugin`, `Calc`, `NetIn`, `NetOut`) instead of Lua.
+- Only PingPlugin is an external dependency.
+- InternetMonitor connect/disconnect shells out to a `.bat` file. `ipconfig` needs admin rights that Rainmeter may not have.
+- ServerStatus uses `IfBelowValue`/`IfAboveValue` plugin actions directly (no separate Calc). It only needs binary online/offline state.
 
 ## To-do
-- [x] pending — document each skin's purpose + dependencies in ai-context/ — done via this session; verified by reading both `.ini` files and `README.md`, no runtime test (Rainmeter not installed here).
+
+- [x] Document each skin's purpose and dependencies in ai-context/. Done in this session. Verified by reading both `.ini` files and `README.md`. No runtime test was run (Rainmeter is not installed here).
 
 ## File map (ai-context/)
-- `technical.md` — stack, file structure, plugin dependency, thresholds/config knobs
-- `resume.md` — cold-start summary + note on uncommitted AGENTS.md/ai-context
+
+- `technical.md` — stack, file structure, plugin dependency, thresholds and config knobs
+- `resume.md` — cold-start summary, plus a note on uncommitted AGENTS.md/ai-context
 - `todo.md` — task list
 - `build-plan.md` — milestone status (both skins already shipped)
 
