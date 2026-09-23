@@ -71,3 +71,21 @@ disappears, except one banner slot. A hover sets `Expanded=1`. Captions sit
 - The latency graph needs a fixed ceiling (`LatCeiling`, 25 ms). `AutoScale` rescales to the window min/max, which makes a flat 2 ms line look like activity.
 - InternetMonitor needs the n8n feed. Without it, link state shows "no data" rather than a false green.
 - No test suite and no build step exist. This is config, verified by loading in Rainmeter, not by automated tests.
+
+## Gotcha: IfMatchAction is edge-triggered
+
+Rainmeter fires `IfMatchAction` only when the match result changes.
+A value that stays healthy never fires its action again.
+A meter set only by `!SetOption` then keeps its literal default.
+
+Do not drive a meter's text from `IfMatchAction` alone.
+Bind the meter with `MeasureName` and map values with `Substitute`.
+The meter then re-renders from the measure on every update.
+
+Give every condition an explicit false branch.
+Use `IfFalseAction` or `IfNotMatchAction` to clear state.
+A raise-only action latches the state on forever.
+
+Three conditions share the one banner slot.
+`MeasureBannerState` arbitrates them worst-first in a single `Calc`.
+It also sets the status word, so "stable" cannot show during a warning.

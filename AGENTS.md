@@ -31,6 +31,8 @@ This plugin is not bundled in this repo — see README Requirements.
 
 ServerStatus is complete and released.
 InternetMonitor was rebuilt in PR #2 around router-sourced link state.
+PR #3 fixed three latched-state bugs in InternetMonitor.
+The link rows, the banner and the status word are now level-triggered.
 No code changes are pending.
 
 ## Key decisions (the why)
