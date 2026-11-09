@@ -1,0 +1,25 @@
+[Rainmeter]
+Update=1000
+DynamicWindowSize=1
+AccurateText=1
+
+[Variables]
+ConnectedColor=0,0,255,255
+DisconnectedColor=0,0,0,255
+
+[MeasureInternet]
+Measure=Plugin
+Plugin=Ping
+Address=8.8.8.8
+UpdateDivider=5
+IfCondition=MeasureInternet = 1
+IfTrueAction=[!SetOption #CURRENTSECTION# ImageTint "#ConnectedColor#"][!Update]
+IfFalseAction=[!SetOption #CURRENTSECTION# ImageTint "#DisconnectedColor#"][!Update]
+
+[Image]
+Meter=Image
+ImageName=internet_symbol.png
+ImageTint=#DisconnectedColor#
+W=100
+H=100
+DynamicVariables=1
