@@ -29,10 +29,10 @@ Without the feed, link state shows "no data" rather than a false "healthy".
 
 ### ServerStatus
 
-A minimal skin that pings up to two local network devices and shows online/offline status with an icon indicator. Useful for monitoring home servers, NAS devices, or any LAN host.
+A minimal skin that pings up to four local network devices and shows online/offline status with an icon indicator. Useful for monitoring home servers, NAS devices, or any LAN host.
 
 **Features:**
-- Pings two configurable IP addresses
+- Pings four configurable IP addresses
 - Shows Online/Offline image per device
 - Fully configurable device names and IPs via variables
 
@@ -104,8 +104,13 @@ Device1Name=Server 1
 
 Device2IP=192.168.1.101
 Device2Name=Server 2
+Device3IP=192.168.1.102
+Device3Name=Server 3
+Device4IP=192.168.1.103
+Device4Name=Server 4
 
 FontName=Segoe UI
+AntiAlias=1
 PingTimeout=1000
 ```
 
